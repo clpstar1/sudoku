@@ -107,10 +107,3 @@ def add_holes(sudoku: Sudoku, percentage):
     
     return sudoku
 
-        
-if __name__ == "__main__":
-        
-    sudoku = generate_sudoku(int(sys.argv[1]) or 9)
-    sudoku = add_holes(sudoku, 0.5)
-
-    print_sudoku(sudoku)
