@@ -16,5 +16,6 @@ if __name__ == "__main__":
 
     sudoku = fill(sudoku)
     sudoku = holes(sudoku, 0.5)
+    sudoku = fill(sudoku)
 
     print_sudoku(sudoku)

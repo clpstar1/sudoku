@@ -20,24 +20,33 @@ class SudokuCache:
             self.cache[index] = set()
         return self.cache[index]
 
+    def clear(self, row, col):
+        index = self._index(row, col)
+        if index in self.cache:
+            self.cache[index] = set()
+
     def _index(self, row, col): 
         return f"{row}{col}"
 
 def fill(sudoku: Sudoku):
-    sudoku_sz = sudoku.size()
+    
     cursor = SudokuCursor(sudoku)
     cache = SudokuCache()
+    sudoku = Sudoku(sudoku.size())
+    return _fill(sudoku, cursor, cache)
 
+def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
+    sudoku_sz = sudoku.size()
     while cursor.hasNext():
         
         cached = cache.get(cursor.row, cursor.col)
 
         if len(cached) == sudoku_sz:
-            if not cursor.hasPrev(): 
-                sudoku.clear()
-                cursor = SudokuCursor(sudoku)
-                cache = SudokuCache()
-            else: cursor.prev()
+            
+            # clear cache, set cell to unsolved, and try again
+            cache.clear(cursor.row, cursor.col)
+            sudoku.set(cursor.row, cursor.col, Cell(0, False)) 
+            cursor.prev()
 
         else: 
             
@@ -47,7 +56,7 @@ def fill(sudoku: Sudoku):
                 cache.set(cursor.row, cursor.col, element)
 
             try:
-                sudoku.set(cursor.row, cursor.col, element)
+                sudoku.set(cursor.row, cursor.col, Cell(element, True))
                 if cursor.hasNext():
                     cursor.next() 
             except:
@@ -67,4 +76,3 @@ def holes(sudoku: Sudoku, percentage):
         sudoku.sudoku[hole] = Cell(0, False)
     
     return sudoku
-

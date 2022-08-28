@@ -24,26 +24,26 @@ class Sudoku:
     def get(self, row, col) -> Cell:
         return self.sudoku[self._index(row, col)]
 
-    def set(self, row, col, item: int) -> None:
-        if not self._check(row, col, item):
-            raise Exception(f"Error: set: cannot set item: {item} at position [{row}, {col}]")
+    def set(self, row, col, cell: Cell) -> None:
+        if not self._check(row, col, cell.value):
+            raise Exception(f"Error: set: cannot set item: {cell.value} at position [{row}, {col}]")
 
         index = self._index(row, col)
-        self.sudoku[index] = Cell(item, True)
+        self.sudoku[index] = cell
     
     def clear(self) -> None:
-        self.sudoku = [Cell(0, False)] * (self.sudoku_size**2)
+        self.sudoku = map(lambda cell: Cell(0, False) if cell.solved == False else cell, self.sudoku)
         
     def row(self, row_index) -> List[int]:
         row = [] 
         for col in range(0, self.sudoku_size):
-            row.append(self.get(row_index, col))
+            row.append(self.get(row_index, col).value)
         return row
 
     def col(self, col_index) -> List[int]:
         col = []
         for row in range(0, self.sudoku_size):
-            col.append(self.get(row, col_index))
+            col.append(self.get(row, col_index).value)
         return col
 
     def cell(self, row_index, col_index): 
@@ -54,7 +54,7 @@ class Sudoku:
         for row in range(0, self.cell_size):
             for col in range(0, self.cell_size):
                 cell.append(
-                    self.get(row_offset + row, col_offset + col)
+                    self.get(row_offset + row, col_offset + col).value
                 )
 
         return cell 
@@ -77,7 +77,10 @@ class Sudoku:
             rows.append(collect_row)
         return rows
     
-    def _check(self, row_index, col_index, item) -> bool: 
+    def _check(self, row_index, col_index, item) -> bool:
+        if item == 0:
+            return True
+
         check_row = self.row(row_index)
         check_col = self.col(col_index)
         check_cell = self.cell(row_index, col_index)

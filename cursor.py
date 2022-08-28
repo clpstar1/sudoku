@@ -36,6 +36,6 @@ class SudokuCursor:
 
         if self.col == 0: 
             self.row -= 1
-            self.col = self.sudoku_size
+            self.col = self.sudoku_size-1
         else: 
             self.col -= 1
