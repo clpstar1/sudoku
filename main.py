@@ -8,7 +8,7 @@ from game import CursorDirection, Game
 options = "Controls:\t(n)ew, (q)uit, [0-9]: set cell, [arrows]: move around"
 
 
-DIFFICULTY = 0.5
+DIFFICULTY = 0.1
 
 def new_game(size, difficulty):
     sudoku = Sudoku(size)
@@ -39,10 +39,10 @@ def main(stdscr: cu.window):
     cu.curs_set(0)
     
     stdscr.nodelay(1)
-    render(game, stdscr, "X")
+    render(game, stdscr, " ")
 
     def wc():
-        render(game, stdscr, "X")
+        render(game, stdscr, " ")
 
     def nc():
         render(game, stdscr)
@@ -72,6 +72,9 @@ def main(stdscr: cu.window):
 
             elif (key.lower() == "n"):
                 game = new_game(size, DIFFICULTY)
+            
+            elif (key.lower() == "c"):
+                game.unset()
 
             elif (key in game.NUMBER_KEYS):
                 game.set(key)

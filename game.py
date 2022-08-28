@@ -13,7 +13,7 @@ class CursorDirection(Enum):
 
 class Game:
 
-    NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     def __init__(self, sudoku: Sudoku) -> None:
         self.sudoku = sudoku
@@ -30,8 +30,10 @@ class Game:
             for col in range(0, sudoku_size):
                 cell = str(self.sudoku.get(row, col).value)
 
+                cell = "?" if cell == "0" else cell
+
                 if row == self.cursor.row and col == self.cursor.col:
-                    cell = cursor if cursor else cell
+                    cell = cursor if cursor != None else cell
 
                 if col == 0:
                     res += "| " + cell + " "
@@ -60,12 +62,17 @@ class Game:
     
     def set(self, key): 
         key = int(key)
-        cell = Cell(key, True) if key != 0 else Cell(key, False)
         try:
-            self.sudoku.set(self.cursor.row, self.cursor.col, cell)
+            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(key, True))
         except:
             pass
     
+    def unset(self):
+        try:
+            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(0, False))
+        except:
+            pass
+
     def check_win(self):
         return reduce(lambda prev, cur: prev and cur.solved, self.sudoku.sudoku, Cell(0, True))
 
