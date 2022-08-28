@@ -3,10 +3,16 @@ from math import sqrt
 
 sudoku_sz = 9
 
+class Cell:
+
+    def __init__(self, value, solved) -> None:
+        self.value = value
+        self.solved = solved
+
 class Sudoku:
 
     def __init__(self, size) -> None:
-        self.sudoku = [0] * (size ** 2)
+        self.sudoku = [Cell(0, False)] * (size ** 2)
         self.sudoku_size = size
         self.cell_size = int(sqrt(size))
 
@@ -15,7 +21,7 @@ class Sudoku:
     def size(self) -> int:
         return self.sudoku_size
     
-    def get(self, row, col) -> int:
+    def get(self, row, col) -> Cell:
         return self.sudoku[self._index(row, col)]
 
     def set(self, row, col, item: int) -> None:
@@ -23,10 +29,10 @@ class Sudoku:
             raise Exception(f"Error: set: cannot set item: {item} at position [{row}, {col}]")
 
         index = self._index(row, col)
-        self.sudoku[index] = item
+        self.sudoku[index] = Cell(item, True)
     
     def clear(self) -> None:
-        self.sudoku = [0] * (self.sudoku_size**2)
+        self.sudoku = [Cell(0, False)] * (self.sudoku_size**2)
         
     def row(self, row_index) -> List[int]:
         row = [] 

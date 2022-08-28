@@ -8,7 +8,7 @@ def print_sudoku(sudoku: Sudoku):
 
     for row in range(0, sudoku_size):
         for col in range(0, sudoku_size):
-            cell = str(sudoku.get(row, col))
+            cell = str(sudoku.get(row, col).value)
 
             if col == 0:
                 print("| " + cell, end=" ")

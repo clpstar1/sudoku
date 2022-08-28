@@ -1,6 +1,6 @@
 from random import randint
 from typing import List
-from sudoku import Sudoku
+from sudoku import Sudoku, Cell
 from cursor import SudokuCursor
 
 class SudokuCache: 
@@ -64,7 +64,7 @@ def holes(sudoku: Sudoku, percentage):
         holes.add(randint(0, sudoku_sz_flat-1))
     
     for hole in holes:
-        sudoku.sudoku[hole] = 0
+        sudoku.sudoku[hole] = Cell(0, False)
     
     return sudoku
 
