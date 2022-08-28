@@ -1,47 +1,7 @@
 from random import randint
-import sys
 from typing import List
-from sudoku_base import Sudoku
-from printer import print_sudoku
-
-class SudokuCursor: 
-
-    def __init__(self, sudoku: Sudoku) -> None:
-        self.sudoku = sudoku
-        self.sudoku_size = sudoku.size()
-        self.row = 0 
-        self.col = 0
-
-    def hasNext(self) -> bool:
-        return self.row < self.sudoku_size and self.col < self.sudoku_size
-
-    def hasPrev(self) -> bool:
-        return self.row > 0 and self.col > 0
-
-    def next(self) -> None:
-        # end reached 
-        if (
-            self.row == self.sudoku_size and 
-            self.col == self.sudoku_size
-        ): raise Exception("Error: next: no next element")
-        # new row 
-        if self.col == self.sudoku_size-1:
-            self.row += 1
-            self.col = 0
-        else: 
-            self.col += 1
-    
-    def prev(self) -> None: 
-        if (
-            self.row == 0 and 
-            self.col == 0
-        ): raise Exception("Error: prev: no previous element")
-
-        if self.col == 0: 
-            self.row -= 1
-            self.col = self.sudoku_size
-        else: 
-            self.col -= 1
+from sudoku import Sudoku
+from cursor import SudokuCursor
 
 class SudokuCache: 
 
@@ -63,10 +23,11 @@ class SudokuCache:
     def _index(self, row, col): 
         return f"{row}{col}"
 
-def generate_sudoku(sudoku_sz):
-    sudoku = Sudoku(sudoku_sz)
+def fill(sudoku: Sudoku):
+    sudoku_sz = sudoku.size()
     cursor = SudokuCursor(sudoku)
     cache = SudokuCache()
+
     while cursor.hasNext():
         
         cached = cache.get(cursor.row, cursor.col)
@@ -77,6 +38,7 @@ def generate_sudoku(sudoku_sz):
                 cursor = SudokuCursor(sudoku)
                 cache = SudokuCache()
             else: cursor.prev()
+
         else: 
             
             element = -1
@@ -94,7 +56,7 @@ def generate_sudoku(sudoku_sz):
 
     return sudoku
 
-def add_holes(sudoku: Sudoku, percentage):
+def holes(sudoku: Sudoku, percentage):
     sudoku_sz_flat = sudoku.size() ** 2
     num_holes = int(sudoku_sz_flat * percentage)
 
@@ -103,7 +65,7 @@ def add_holes(sudoku: Sudoku, percentage):
         holes.add(randint(0, sudoku_sz_flat-1))
     
     for hole in holes:
-        sudoku.sudoku[hole] = '?'
+        sudoku.sudoku[hole] = 0
     
     return sudoku
 

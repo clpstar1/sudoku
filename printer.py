@@ -1,4 +1,4 @@
-from sudoku_base import Sudoku
+from sudoku import Sudoku
 
 def print_sudoku(sudoku: Sudoku):
     sudoku_size = sudoku.size()

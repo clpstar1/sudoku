@@ -1,6 +1,7 @@
-from generator import generate_sudoku, add_holes
+from generator import fill, holes
 from printer import print_sudoku
 from argparse import ArgumentParser
+from sudoku import Sudoku
 
 if __name__ == "__main__":
 
@@ -9,9 +10,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    size = int(args.size)
+    size = int(args.size or 9)
 
-    sudoku = generate_sudoku(size or 9)
-    sudoku = add_holes(sudoku, 0.5)
+    sudoku = Sudoku(size)
+
+    sudoku = fill(sudoku)
+    sudoku = holes(sudoku, 0.5)
 
     print_sudoku(sudoku)

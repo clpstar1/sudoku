@@ -24,6 +24,9 @@ class Sudoku:
 
         index = self._index(row, col)
         self.sudoku[index] = item
+    
+    def clear(self) -> None:
+        self.sudoku = [0] * (self.sudoku_size**2)
         
     def row(self, row_index) -> List[int]:
         row = [] 
