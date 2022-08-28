@@ -29,14 +29,8 @@ class SudokuCache:
         return f"{row}{col}"
 
 def fill(sudoku: Sudoku):
-    
     cursor = SudokuCursor(sudoku)
     cache = SudokuCache()
-    sd = _fill(sudoku, cursor, cache)
-    sd.sudoku = [Cell(cell.value, True) for cell in sd.sudoku]
-    return sd
-
-def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
     sudoku_sz = sudoku.size()
     while cursor.hasNext():
 
@@ -68,6 +62,7 @@ def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
             except:
                 pass
 
+    sudoku.sudoku = [Cell(cell.value, True) for cell in sudoku.sudoku]
     return sudoku
 
 def holes(sudoku: Sudoku, percentage):
