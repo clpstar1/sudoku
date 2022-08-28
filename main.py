@@ -1,11 +1,13 @@
 from argparse import ArgumentParser
 from enum import Enum
+from functools import reduce
 from threading import Timer
 from generator import fill, holes
 from sudoku import Sudoku
 from cursor import SudokuCursor
 import curses as cu
 from interval import Interval
+from sudoku import Cell
 
 class CursorDirection(Enum):
     UP = 0
@@ -15,7 +17,11 @@ class CursorDirection(Enum):
 
 class Game:
 
-    def __init__(self, sudoku) -> None:
+    NUMBER_KEYS = [
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
+        ]
+
+    def __init__(self, sudoku: Sudoku) -> None:
         self.sudoku = sudoku
         self.cursor = SudokuCursor(self.sudoku)
 
@@ -57,6 +63,17 @@ class Game:
             self.cursor.down()
         elif(direction == CursorDirection.LEFT):
             self.cursor.left()
+    
+    def set(self, key): 
+        key = int(key)
+        cell = Cell(key, True) if key != 0 else Cell(key, False)
+        try:
+            self.sudoku.set(self.cursor.row, self.cursor.col, cell)
+        except:
+            pass
+    
+    def check_win(self):
+        return reduce(lambda prev, cur: prev and cur.solved, self.sudoku.sudoku, Cell(0, True))
 
 def main(stdscr: cu.window):
     parser = ArgumentParser()
@@ -67,7 +84,7 @@ def main(stdscr: cu.window):
     size = int(args.size or 9)
 
     sudoku = fill(Sudoku(size))
-    sudoku = holes(sudoku, 0.5)
+    sudoku = holes(sudoku, 0.1)
 
     game = Game(sudoku)
 
@@ -84,7 +101,7 @@ def main(stdscr: cu.window):
         stdscr.erase()
         stdscr.addstr(game.sudoku_string(""))
 
-    iv = Interval(0.5, wc, nc)
+    iv = Interval(0.3, wc, nc)
     iv.start()
 
     while True:
@@ -105,6 +122,12 @@ def main(stdscr: cu.window):
 
             elif (key.lower() == "q"):
                 break
+
+            elif (key in game.NUMBER_KEYS):
+                game.set(key)
+                if game.check_win() == True:
+                    break
+
         except:
             pass
     
