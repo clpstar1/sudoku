@@ -43,3 +43,15 @@ class SudokuCursor:
             self.col = self.sudoku_size-1
         else: 
             self.col -= 1
+
+    def up(self) -> None:
+        self.row = (self.row - 1) % self.sudoku_size
+
+    def down(self) -> None:
+        self.row = (self.row + 1) % self.sudoku_size
+    
+    def left(self) -> None:
+        self.col = (self.col - 1) % self.sudoku_size
+
+    def right(self) -> None:
+        self.col = (self.col + 1) % self.sudoku_size

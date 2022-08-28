@@ -26,3 +26,6 @@ def print_horizontal_border(sudoku):
     sudoku_size = sudoku.size()
     cell_size = sudoku.cell_size
     print("- " * (sudoku_size + cell_size + 1))
+
+
+
