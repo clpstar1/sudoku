@@ -5,7 +5,9 @@ import curses as cu
 from interval import Interval
 from game import CursorDirection, Game
 
-options = "Controls: (n)ew, (q)uit, [0-9]: set cell, [arrows]: move around"
+options = "Controls:\t(n)ew, (q)uit, [0-9]: set cell, [arrows]: move around"
+
+
 DIFFICULTY = 0.5
 
 def new_game(size, difficulty):
@@ -14,6 +16,15 @@ def new_game(size, difficulty):
     sudoku = holes(sudoku, difficulty)
     game = Game(sudoku)
     return game
+
+def available_string(avail):
+    return f"Available:\t{avail} \n"
+
+def render(game: Game, stdscr: cu.window, cursor = None):
+    stdscr.erase()
+    stdscr.addstr(game.sudoku_string(cursor))
+    stdscr.addstr(available_string(game.available()))
+    stdscr.addstr(options)
 
 def main(stdscr: cu.window):
     parser = ArgumentParser()
@@ -28,18 +39,14 @@ def main(stdscr: cu.window):
     cu.curs_set(0)
     
     stdscr.nodelay(1)
-    stdscr.addstr(game.sudoku_string("X"))
-    stdscr.addstr(options)
+    render(game, stdscr, "X")
 
     def wc():
-        stdscr.erase()
-        stdscr.addstr(game.sudoku_string("X"))
-        stdscr.addstr(options)
+        render(game, stdscr, "X")
 
     def nc():
-        stdscr.erase()
-        stdscr.addstr(game.sudoku_string(""))
-        stdscr.addstr(options)
+        render(game, stdscr)
+
 
     iv = Interval(0.3, wc, nc)
     iv.start()

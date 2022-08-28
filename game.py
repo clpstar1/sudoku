@@ -68,3 +68,6 @@ class Game:
     
     def check_win(self):
         return reduce(lambda prev, cur: prev and cur.solved, self.sudoku.sudoku, Cell(0, True))
+
+    def available(self):
+        return str(self.sudoku.available(self.cursor.row, self.cursor.col))

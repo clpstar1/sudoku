@@ -58,6 +58,13 @@ class Sudoku:
                 )
 
         return cell 
+    
+    def available(self, row_index, col_index):
+        res = []
+        for maybe in range(1, self.sudoku_size+1):
+            if (self._check(row_index, col_index, maybe)):
+                res.append(maybe)
+        return res 
 
     def _index(self, row, col) -> int:
         
