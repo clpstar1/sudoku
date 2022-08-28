@@ -5,36 +5,34 @@ import curses as cu
 from interval import Interval
 from game import CursorDirection, Game
 
-options = "Controls:\t(n)ew, (q)uit, [0-9]: set cell, [arrows]: move around"
-
-
-DIFFICULTY = 0.1
+options = "Controls:\t(n)ew; (q)uit; (c)lear;\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
 
 def new_game(size, difficulty):
     sudoku = Sudoku(size)
     sudoku = fill(sudoku)
     sudoku = holes(sudoku, difficulty)
-    game = Game(sudoku)
+    game = Game(sudoku, difficulty)
     return game
 
 def available_string(avail):
     return f"Available:\t{avail} \n"
 
+def difficulty_string(diff):
+    return f"Difficulty: \t{float(diff) * 100}% holes \n"
+
 def render(game: Game, stdscr: cu.window, cursor = None):
     stdscr.erase()
     stdscr.addstr(game.sudoku_string(cursor))
     stdscr.addstr(available_string(game.available()))
+    stdscr.addstr(difficulty_string(str(game.difficulty)))
     stdscr.addstr(options)
 
 def main(stdscr: cu.window):
-    parser = ArgumentParser()
-    parser.add_argument("size")
 
-    args = parser.parse_args()
+    size = 9
+    difficulty = 0.5
 
-    size = int(args.size or 9)
-
-    game = new_game(size, DIFFICULTY)
+    game = new_game(size, difficulty)
 
     cu.curs_set(0)
     
@@ -48,7 +46,7 @@ def main(stdscr: cu.window):
         render(game, stdscr)
 
 
-    iv = Interval(0.3, wc, nc)
+    iv = Interval(0.25, wc, nc)
     iv.start()
 
     while True:
@@ -71,10 +69,20 @@ def main(stdscr: cu.window):
                 break
 
             elif (key.lower() == "n"):
-                game = new_game(size, DIFFICULTY)
+                game = new_game(size, game.difficulty)
             
             elif (key.lower() == "c"):
                 game.unset()
+
+            elif (key == "+"):
+                new_difficulty = (game.difficulty * 10) + 1
+                if (new_difficulty >= 10.0): continue
+                game = new_game(size, new_difficulty / 10)
+
+            elif (key == "-"):
+                new_difficulty = (game.difficulty * 10) - 1
+                if (new_difficulty == 0.0): continue
+                game = new_game(size, new_difficulty/10)
 
             elif (key in game.NUMBER_KEYS):
                 game.set(key)

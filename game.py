@@ -15,9 +15,10 @@ class Game:
 
     NUMBER_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-    def __init__(self, sudoku: Sudoku) -> None:
+    def __init__(self, sudoku: Sudoku, difficulty) -> None:
         self.sudoku = sudoku
         self.cursor = SudokuCursor(self.sudoku)
+        self.difficulty = difficulty
 
     def sudoku_string(self, cursor = None):
         sudoku_size = self.sudoku.size()
