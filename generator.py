@@ -34,18 +34,17 @@ def fill(sudoku: Sudoku):
 
         if len(cached) == sudoku_sz:
             if not cursor.hasPrev(): 
-                sudoku = Sudoku(sudoku_sz)
+                sudoku.clear()
                 cursor = SudokuCursor(sudoku)
                 cache = SudokuCache()
             else: cursor.prev()
 
         else: 
             
-            element = -1
-            while element == -1 and element not in cached:
+            element = 0
+            while element not in cached:
                 element = randint(1, sudoku_sz)
-            
-            cache.set(cursor.row, cursor.col, element)
+                cache.set(cursor.row, cursor.col, element)
 
             try:
                 sudoku.set(cursor.row, cursor.col, element)
