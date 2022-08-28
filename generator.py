@@ -32,12 +32,17 @@ def fill(sudoku: Sudoku):
     
     cursor = SudokuCursor(sudoku)
     cache = SudokuCache()
-    sudoku = Sudoku(sudoku.size())
-    return _fill(sudoku, cursor, cache)
+    sd = _fill(sudoku, cursor, cache)
+    sd.sudoku = [Cell(cell.value, True) for cell in sd.sudoku]
+    return sd
 
 def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
     sudoku_sz = sudoku.size()
     while cursor.hasNext():
+
+        if (sudoku.get(cursor.row, cursor.col).solved == True):
+            cursor.next()
+            continue
         
         cached = cache.get(cursor.row, cursor.col)
 
@@ -47,6 +52,8 @@ def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
             cache.clear(cursor.row, cursor.col)
             sudoku.set(cursor.row, cursor.col, Cell(0, False)) 
             cursor.prev()
+            while (sudoku.get(cursor.row, cursor.col).solved == True):
+                cursor.prev()
 
         else: 
             
@@ -56,9 +63,8 @@ def _fill(sudoku: Sudoku, cursor: SudokuCursor, cache: SudokuCache):
                 cache.set(cursor.row, cursor.col, element)
 
             try:
-                sudoku.set(cursor.row, cursor.col, Cell(element, True))
-                if cursor.hasNext():
-                    cursor.next() 
+                sudoku.set(cursor.row, cursor.col, Cell(element, False))
+                cursor.next() 
             except:
                 pass
 

@@ -10,16 +10,20 @@ class SudokuCursor:
         self.col = 0
 
     def hasNext(self) -> bool:
-        return self.row < self.sudoku_size and self.col < self.sudoku_size
+        if self.row == self.sudoku_size-1: return self.col < self.sudoku_size-1
+        if self.col == self.sudoku_size-1: return self.row < self.sudoku_size-1
+        return True 
 
     def hasPrev(self) -> bool:
-        return self.row > 0 and self.col > 0
+        if self.row == 0: return self.col > 0
+        if self.col == 0: return self.row > 0
+        return True
 
     def next(self) -> None:
         # end reached 
         if (
-            self.row == self.sudoku_size and 
-            self.col == self.sudoku_size
+            self.row == self.sudoku_size-1 and 
+            self.col == self.sudoku_size-1
         ): raise Exception("Error: next: no next element")
         # new row 
         if self.col == self.sudoku_size-1:
