@@ -32,7 +32,7 @@ def fill(sudoku: Sudoku):
     cursor = SudokuCursor(sudoku)
     cache = SudokuCache()
     sudoku_sz = sudoku.size()
-    while cursor.hasNext():
+    while cursor.row < sudoku_sz and cursor.col < sudoku_sz:
 
         if (sudoku.get(cursor.row, cursor.col).solved == True):
             cursor.next()
@@ -51,7 +51,7 @@ def fill(sudoku: Sudoku):
 
         else: 
             
-            element = 0
+            element = -1
             while element not in cached:
                 element = randint(1, sudoku_sz)
                 cache.set(cursor.row, cursor.col, element)
@@ -62,6 +62,7 @@ def fill(sudoku: Sudoku):
             except:
                 pass
 
+    
     sudoku.sudoku = [Cell(cell.value, True) for cell in sudoku.sudoku]
     return sudoku
 

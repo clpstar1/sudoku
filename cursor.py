@@ -22,8 +22,8 @@ class SudokuCursor:
     def next(self) -> None:
         # end reached 
         if (
-            self.row == self.sudoku_size-1 and 
-            self.col == self.sudoku_size-1
+            self.row == self.sudoku_size and 
+            self.col == self.sudoku_size
         ): raise Exception("Error: next: no next element")
         # new row 
         if self.col == self.sudoku_size-1:
