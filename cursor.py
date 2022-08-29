@@ -9,23 +9,11 @@ class SudokuCursor:
         self.row = 0 
         self.col = 0
 
-    def hasNext(self) -> bool:
-        if self.row == self.sudoku_size-1: return self.col < self.sudoku_size-1
-        if self.col == self.sudoku_size-1: return self.row < self.sudoku_size-1
-        return True 
-
-    def hasPrev(self) -> bool:
-        if self.row == 0: return self.col > 0
-        if self.col == 0: return self.row > 0
-        return True
-
     def next(self) -> None:
-        # end reached 
         if (
             self.row == self.sudoku_size and 
             self.col == self.sudoku_size
-        ): raise Exception("Error: next: no next element")
-        # new row 
+        ): raise Exception("Error: next: no next element") 
         if self.col == self.sudoku_size-1:
             self.row += 1
             self.col = 0
