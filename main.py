@@ -8,6 +8,8 @@ def main(stdscr: cu.window):
     size = 9
     difficulty = 0.5
 
+    print(cu.LINES)
+
     game = Game.new(size, difficulty)
     screen = Screen(stdscr)
     game.addListener(screen)
@@ -16,7 +18,7 @@ def main(stdscr: cu.window):
     cu.curs_set(0)
     
     stdscr.nodelay(1)
-    
+
     while True:
         try:
             key = stdscr.getkey()
@@ -65,5 +67,3 @@ def main(stdscr: cu.window):
 
 if __name__ == "__main__":
     cu.wrapper(main)
-    
-    
