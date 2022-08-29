@@ -63,7 +63,7 @@ def fill(sudoku: Sudoku):
                 pass
 
     
-    sudoku.sudoku = [Cell(cell.value, True) for cell in sudoku.sudoku]
+    sudoku.sudoku = [Cell(cell.value, True, cell.value) for cell in sudoku.sudoku]
     return sudoku
 
 def holes(sudoku: Sudoku, percentage):
@@ -75,6 +75,8 @@ def holes(sudoku: Sudoku, percentage):
         holes.add(randint(0, sudoku_sz_flat-1))
     
     for hole in holes:
-        sudoku.sudoku[hole] = Cell(0, False)
+        cell = sudoku.sudoku[hole]
+        
+        sudoku.sudoku[hole] = Cell(0, False, cell.value)
     
     return sudoku

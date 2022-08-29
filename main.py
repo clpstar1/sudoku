@@ -42,6 +42,9 @@ def main(stdscr: cu.window):
             elif (key.lower() == "c"):
                 game.unset()
 
+            elif (key.lower() == "r"):
+                game.reveal()
+
             elif (key == "+"):
                 game.raise_difficulty_by(1)
 

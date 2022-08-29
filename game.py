@@ -38,7 +38,7 @@ class Screen():
         self.window.addstr(self.__difficulty_string(str(self.game.difficulty)))
         self.window.addstr(self.__options)
         
-    __options = "Controls:\t(n)ew; (q)uit; (c)lear;\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
+    __options = "Controls:\t(n)ew; (q)uit; (c)lear; (r)eveal\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
 
     def __available_string(self, avail):
         return f"Available:\t{avail} \n"
@@ -57,9 +57,9 @@ class Screen():
 
         for row in range(0, sudoku_size):
             for col in range(0, sudoku_size):
-                cell = str(sudoku.get(row, col).value)
+                cell = sudoku.get(row, col)
 
-                cell = "?" if cell == "0" else cell
+                cell = "?" if cell.value == 0 else str(cell.value)
 
                 if row == self.game.cursor.row and col == self.game.cursor.col:
                     cell = cursor if cursor != None else cell
@@ -132,15 +132,17 @@ class Game:
     @notify_listeners
     def set(self, key): 
         key = int(key)
+        cell = self.__get()
         try:
-            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(key, True))
+            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(key, True, cell.original_value))
         except:
             pass
     
     @notify_listeners
     def unset(self):
+        cell = self.__get()
         try:
-            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(0, False))
+            self.sudoku.set(self.cursor.row, self.cursor.col, Cell(0, False, cell.original_value))
         except:
             pass
     
@@ -154,6 +156,11 @@ class Game:
     @notify_listeners
     def reset(self):
         self.sudoku = Game.__new_sudoku(self.sudoku.size(), self.difficulty)
+    
+    @notify_listeners
+    def reveal(self):
+        original_cell = self.__get()
+        original_cell.value  = original_cell.original_value
 
     def check_win(self):
         return reduce(lambda prev, cur: prev and cur.solved, self.sudoku.sudoku, Cell(0, True))
@@ -169,6 +176,12 @@ class Game:
     def notify(self):
         for listener in self.listeners:
             listener.onUpdate(self)
+    
+    def __set(self, item: Cell):
+        return self.sudoku.set(self.cursor.row, self.cursor.col, item)
+
+    def __get(self):
+        return self.sudoku.get(self.cursor.row, self.cursor.col)
 
     def __compose(f, g):
         return lambda x : f(g(x))

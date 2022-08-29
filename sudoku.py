@@ -5,9 +5,10 @@ sudoku_sz = 9
 
 class Cell:
 
-    def __init__(self, value, solved) -> None:
+    def __init__(self, value, solved, original_value = None) -> None:
         self.value = value
         self.solved = solved
+        self.original_value = original_value or value
 
 class Sudoku:
 
