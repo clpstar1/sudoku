@@ -37,6 +37,7 @@ class Screen():
         self.window.addstr(self.__available_string(self.game.available()))
         self.window.addstr(self.__difficulty_string(str(self.game.difficulty)))
         self.window.addstr(self.__options)
+        self.window.refresh()
         
     __options = "Controls:\t(n)ew; (q)uit; (c)lear; (r)eveal\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
 

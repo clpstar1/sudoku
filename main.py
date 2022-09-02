@@ -1,4 +1,5 @@
 import curses as cu
+from threading import Thread
 from game import CursorDirection, Game, Screen
 
 options = "Controls:\t(n)ew; (q)uit; (c)lear;\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
@@ -8,14 +9,18 @@ def main(stdscr: cu.window):
     size = 9
     difficulty = 0.5
 
+    
+
+
     game = Game.new(size, difficulty)
     screen = Screen(stdscr)
+
+  
+
     game.addListener(screen)
     game.notify()
 
     cu.curs_set(0)
-    
-    stdscr.nodelay(1)
     
     while True:
         try:
