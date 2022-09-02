@@ -34,8 +34,6 @@ class Screen():
         self.status_win = window.derwin(5, 100, 13, 0)
         self.opt_win = window.derwin(10, 100, 0, 27)
 
-        
-        
         self.game: Game = None
         self.interval = None
 
@@ -49,7 +47,7 @@ class Screen():
         self.sudoku_win.addstr(self.render_sudoku(cursor))
         self.status_win.addstr(f"{self.__available_string(self.game.available())}\n{self.__difficulty_string(self.game.difficulty)}")
 
-        self.sudoku_win.refresh
+        self.sudoku_win.refresh()
         
 
     __options = "Controls:\n(n)ew\n(q)uit\n(c)lear\n(r)eveal\n[1 - 9]: set cell\n[arrow]: move\n[+ / -]: adjust difficulty"
