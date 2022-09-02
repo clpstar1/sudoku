@@ -26,26 +26,39 @@ class Screen():
     BLINK_DURATION = 0.25
 
     def __init__(self, window: cu.window):
+
+       
         self.window = window
+        
+        self.sudoku_win = window.derwin(15, 27, 0, 0)
+        self.status_win = window.derwin(5, 100, 13, 0)
+        self.opt_win = window.derwin(10, 100, 0, 27)
+
+        
+        
         self.game: Game = None
         self.interval = None
 
     
     def render(self, cursor = None):
+        self.opt_win.erase()
+        self.sudoku_win.erase()
+        self.status_win.erase()
         self.window.erase()
-        self.window.addstr(self.render_sudoku(cursor))
-        self.window.addstr(self.__available_string(self.game.available()))
-        self.window.addstr(self.__difficulty_string(str(self.game.difficulty)))
-        self.window.addstr(self.__options)
-        self.window.refresh()
+        self.opt_win.addstr(self.__options)
+        self.sudoku_win.addstr(self.render_sudoku(cursor))
+        self.status_win.addstr(f"{self.__available_string(self.game.available())}\n{self.__difficulty_string(self.game.difficulty)}")
+
+        self.sudoku_win.refresh
         
-    __options = "Controls:\t(n)ew; (q)uit; (c)lear; (r)eveal\n\t\t[0-9]: set cell; [arrows]: move; [+/-]: adjust difficulty"
+
+    __options = "Controls:\n(n)ew\n(q)uit\n(c)lear\n(r)eveal\n[1 - 9]: set cell\n[arrow]: move\n[+ / -]: adjust difficulty"
 
     def __available_string(self, avail):
-        return f"Available:\t{avail} \n"
+        return f"Available : {avail}"
 
     def __difficulty_string(self, diff):
-        return f"Difficulty: \t{float(diff) * 100}% holes \n"
+        return f"Difficulty: {float(diff) * 100}% holes"
 
     
     def render_sudoku(self, cursor = None):
